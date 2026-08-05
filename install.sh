@@ -24,7 +24,18 @@ echo "→ installing recorder into $LITE"
 mkdir -p "$LITE" "$SKILLS/parchment-lite" "$SKILLS/sheath" "$HOME/.claude"
 curl -fsSL "$RAW/lib/record.js"          -o "$LITE/record.js"
 curl -fsSL "$RAW/lib/sheath-trigger.js"  -o "$LITE/sheath-trigger.js"
-chmod +x "$LITE/record.js" "$LITE/sheath-trigger.js"
+curl -fsSL "$RAW/lib/tui.js"             -o "$LITE/tui.js"
+chmod +x "$LITE/record.js" "$LITE/sheath-trigger.js" "$LITE/tui.js"
+
+echo "→ installing the parchment-lite command (interactive session browser)"
+BIN_DIR="/usr/local/bin"
+[ -w "$BIN_DIR" ] || { BIN_DIR="$HOME/.local/bin"; mkdir -p "$BIN_DIR"; }
+printf '#!/usr/bin/env bash\nexec node "%s/tui.js" "$@"\n' "$LITE" > "$BIN_DIR/parchment-lite"
+chmod +x "$BIN_DIR/parchment-lite"
+case ":$PATH:" in
+  *":$BIN_DIR:"*) echo "  installed: $BIN_DIR/parchment-lite" ;;
+  *) echo "  installed: $BIN_DIR/parchment-lite  (add $BIN_DIR to your PATH)" ;;
+esac
 
 echo "→ installing skills (/parchment-lite, /sheath)"
 curl -fsSL "$RAW/skills/parchment-lite/SKILL.md" -o "$SKILLS/parchment-lite/SKILL.md"
@@ -69,6 +80,7 @@ fi
 
 echo ""
 echo "✓ parchment-lite installed."
+echo "  · run 'parchment-lite' for the interactive session browser (arrows/clicks)"
 echo "  · sessions auto-record to ~/.parchment-lite/sessions.json"
 echo "  · say \"Sheath Your Blade\" (or /sheath) to close a session with a record"
 echo "  · /parchment-lite status · log · capture for manual control"

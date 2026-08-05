@@ -15,6 +15,10 @@ with a timestamped backup of your `settings.json` before it touches anything.)
 
 ## What you get
 
+- **`parchment-lite` (v0.2)** — an interactive, GUI-like session browser in
+  your terminal: arrow keys, number keys, and real mouse clicks. Browse the
+  Sessions Library, open a card, toggle it active, delete it. Just run
+  `parchment-lite`.
 - **Auto-recording** — every Claude Code session becomes a card in
   `~/.parchment-lite/sessions.json` (title, prompt log, timestamps). Recorded
   by hooks, zero Claude tokens spent.
